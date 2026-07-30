@@ -12,8 +12,21 @@
 #define PIN_B_OFF(PIN) (PORTB &= ~(1 << PIN))
 
 // - - - - - - - - - - -  FUNCTIONS - - - - - - - - - -
-void init_pwm();
-void init_adc();
-void init_timer_0();
+/**
+ * @brief Configures Timer1 for Fast PWM mode (~120kHz) on PB1
+ */
+void timer1_pwm_init(void);
+
+/**
+ * @brief Sets the duty cycle as a percentage (0 to 100)
+ * @param duty_percent Integer percentage between 0 and 100
+ */
+void pwm_set_duty_percent(uint8_t duty_percent);
+
+/**
+ * @brief Sets the duty cycle with higher precision (0 to 1000 representing 0.0% to 100.0%)
+ * @param duty_permille Permille value between 0 and 1000
+ */
+void pwm_set_duty_permille(uint16_t duty_permille);
 
 #endif // DEFINITIONS_H
