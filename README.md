@@ -9,4 +9,4 @@ Un ATMega328P genera una señal PWM con ciclo de trabajo variable (parámetro D 
 
 ![photo of the working converter](./photo.webp)
 
-_En la foto se puede observar como la tensión de la celda (3.85V) se elevaron a 10V_
+_En la foto se puede observar como la tensión de la celda (3.85V) se elevó a 10V_
