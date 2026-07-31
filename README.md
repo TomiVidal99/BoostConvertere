@@ -8,3 +8,5 @@ El objetivo final es tener un convertidor que sea capaz de tomar la tensión de 
 Un ATMega328P genera una señal PWM con ciclo de trabajo variable (parámetro D del convertidor), tal que varíe la tensión de salida del convertidor.
 
 ![photo of the working converter](./photo.webp)
+
+_En la foto se puede observar como la tensión de la celda (3.85V) se elevaron a 10V_
