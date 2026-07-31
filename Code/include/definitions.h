@@ -4,7 +4,8 @@
 #include <stdint.h>
 
 // - - - - - - - - - - -  PINS DEFINITIONS - - - - - - - - - -
-#define PWM_PIN PB1
+#define PWM_PIN    (PB1) // Arduino Pin 9 (OC1A)
+#define BUTTON_PIN (PD2) // Arduino Pin 2
 
 // - - - - - - - - - - -  USEFUL MACROS - - - - - - - - - -
 #define PIN_B_ENABLE(PIN) (DDRB |= (1 << PIN))
@@ -16,6 +17,11 @@
  * @brief Configures Timer1 for Fast PWM mode (~120kHz) on PB1
  */
 void timer1_pwm_init(void);
+
+/**
+ * @brief Configures the button pin as input with internal pull-up
+ */
+void button_init(void);
 
 /**
  * @brief Sets the duty cycle as a percentage (0 to 100)

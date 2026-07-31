@@ -3,8 +3,9 @@
  * Author: Tomás Vidal
  * Last revision: 30/07/2026
  *
- * TLDR: Fast PWM generator at ~120kHz with integer duty cycle
+ * TLDR: Fast PWM generator at ~120kHz with button polling on PD2
  * Output: Pin 9 (PB1 / OC1A)
+ * Button: Pin 2 (PD2) to GND
  */
 
 #ifndef F_CPU
@@ -16,26 +17,51 @@
 
 #include "definitions.h"
 
+// Array of duty cycle percentages to cycle through
+const uint8_t DUTY_STEPS[] = {10, 25, 50, 75, 90};
+#define NUM_DUTY_STEPS (sizeof(DUTY_STEPS) / sizeof(DUTY_STEPS[0]))
+
 int main(void)
 {
     // Configure PB1 (Pin 9) as output
     DDRB |= (1 << PWM_PIN);
 
-    // Initialize Timer1 in Fast PWM Mode
+    // Initialize Button & Timer1 PWM
+    button_init();
     timer1_pwm_init();
 
-    // Set initial Duty Cycle to 50%
-    pwm_set_duty_percent(75);
+    uint8_t current_step = 2; // Start at index 2 (50%)
+    pwm_set_duty_percent(DUTY_STEPS[current_step]);
+
+    uint8_t button_last_state = 1; // High due to internal pull-up
 
     while (1)
     {
-        // // Example: Sweeping duty cycle from 10% to 90% in 5% steps
-        // for (uint8_t d = 10; d <= 90; d += 5)
-        // {
-        //     pwm_set_duty_percent(d);
-        //     _delay_ms(500);
-        // }
+        // 100ms polling rate
+        _delay_ms(100);
+
+        // Read current button pin state (0 = Pressed, 1 = Released)
+        uint8_t button_current_state = (PIND & (1 << BUTTON_PIN)) ? 1 : 0;
+
+        // Detect falling edge (transition from Released -> Pressed)
+        if (button_last_state == 1 && button_current_state == 0)
+        {
+            // Cycle to the next step
+            current_step = (current_step + 1) % NUM_DUTY_STEPS;
+            pwm_set_duty_percent(DUTY_STEPS[current_step]);
+        }
+
+        // Save state for edge detection
+        button_last_state = button_current_state;
     }
+}
+
+void button_init(void) {
+    // Set PD2 as input
+    DDRD &= ~(1 << BUTTON_PIN);
+
+    // Enable internal pull-up resistor on PD2
+    PORTD |= (1 << BUTTON_PIN);
 }
 
 void timer1_pwm_init(void) {
@@ -44,8 +70,7 @@ void timer1_pwm_init(void) {
     TCCR1B = 0;
     TCNT1  = 0;
 
-    ICR1 = 93; // for 120KHz
-    // ICR1 = 200;
+    ICR1 = 96;
 
     // Set initial pulse width (0% duty cycle)
     OCR1A = 0;
@@ -65,7 +90,6 @@ void pwm_set_duty_percent(uint8_t duty_percent) {
     }
 
     // Integer math: Multiply first, then divide to retain precision
-    // OCR1A = (duty * 132) / 100
     OCR1A = ((uint32_t)duty_percent * ICR1) / 100;
 }
 
@@ -75,6 +99,6 @@ void pwm_set_duty_permille(uint16_t duty_permille) {
         duty_permille = 1000;
     }
 
-    // OCR1A = (duty * 132) / 1000
+    // OCR1A = (duty * ICR1) / 1000
     OCR1A = ((uint32_t)duty_permille * ICR1) / 1000;
 }
