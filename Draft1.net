@@ -1,0 +1,34 @@
+*
+S1 N001 Vo- N003 0 SW
+S2 0 Vo+ N003 0 SW
+S3 N001 Vo+ N002 0 SW
+S4 0 Vo- N002 0 SW
+R1 P001 Vo- 5
+L1 Vo+ P001 1m Rser=1m
+V1 N001 0 {Vdc}
+V2 N003 0 PULSE(0 100 {t_alpha} 1p 1p {Ton} {T} )
+V3 N002 0 PULSE(0 100 {(T/2)+t_alpha} 1p 1p {Ton} {T} )
+.model SW SW(Ron=1m Roff=1Meg Vt=0.6 Vh=0.2)
+; --- Circuit Parameters ---
+.param Vdc = 100
+.param freq = 50
+.param alpha_deg=30.0
+.param Vgate = 5
+; Force floating-point division using 360.0
+.param T = 1/freq
+.param t_alpha = (alpha_deg / 360.0) * T
+.param Ton = (T/2) - (2*t_alpha)
+; --- Simulation Command (Starts saving at 0s, runs for 6 full cycles = 120ms) ---
+.tran 0 120m 0 100n
+; --- Fourier Analysis (Analyzes last 20ms cycle from 100ms to 120ms) ---
+.four 50 9 V(Vo+,Vo-)
+; --- Automated Measurements (.meas) ---
+.meas Vo_RMS RMS V(Vo+,Vo-) FROM 100m TO 120m
+.meas Vo_AVG AVG V(Vo+,Vo-) FROM 100m TO 120m
+.meas Vo_PEAK MAX V(Vo+,Vo-) FROM 100m TO 120m
+.meas Io_RMS RMS I(R1) FROM 100m TO 120m
+.meas P_AVG AVG V(Vo+,Vo-)*I(R1) FROM 100m TO 120m
+.meas ALPHA PARAM  t_alpha
+.meas T_ON PARAM Ton
+.backanno
+.end

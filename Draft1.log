@@ -1,0 +1,39 @@
+LTspice 26.0.1 for Windows
+Circuit: C:\Users\tomii\Github\BoostConvert\Draft1.net
+Start Time: Sat Aug  1 20:17:35 2026
+solver = Normal
+Maximum thread count: 16
+tnom = 27
+temp = 27
+method = trap
+Direct Newton iteration succeeded in finding operating point.
+Total elapsed time: 6.095 seconds.
+
+Files loaded:
+C:\Users\tomii\Github\BoostConvert\Draft1.net
+
+Fourier components of V(Vo+,Vo-)
+N-Period=1
+DC component:1.86954e-10
+
+Harmonic	Frequency	 Fourier 	Normalized	 Phase  	Normalized
+ Number 	  [Hz]   	Component	 Component	[degree]	Phase [deg]
+    1   	 5.000e+01	 1.083e+02	 1.000e+00	  -91.83°	    0.00°
+    2   	 1.000e+02	 5.095e-11	 4.705e-13	    0.16°	   91.99°
+    3   	 1.500e+02	 3.996e+00	 3.690e-02	   90.00°	  181.83°
+    4   	 2.000e+02	 2.571e-11	 2.374e-13	   -0.32°	   91.51°
+    5   	 2.500e+02	 2.429e+01	 2.243e-01	   81.80°	  173.64°
+    6   	 3.000e+02	 2.694e-13	 2.488e-15	   32.38°	  124.21°
+    7   	 3.500e+02	 1.418e+01	 1.309e-01	   75.86°	  167.70°
+    8   	 4.000e+02	 1.308e-11	 1.208e-13	  179.64°	  271.47°
+    9   	 4.500e+02	 3.996e+00	 3.691e-02	  -90.01°	    1.82°
+Partial Harmonic Distortion: 26.494454%
+Total Harmonic Distortion:   5857.530312%
+
+vo_rms: RMS(V(Vo+,Vo-) )=4486.04972201 FROM 0.1 TO 0.12
+vo_avg: AVG(V(Vo+,Vo-) )=9.96253270725e-11 FROM 0.1 TO 0.12
+vo_peak: MAX(V(Vo+,Vo-) )=19958050 FROM 0.1 TO 0.12
+io_rms: RMS(I(R1) )=15.948935424 FROM 0.1 TO 0.12
+p_avg: AVG(V(Vo+,Vo-)*I(R1) )=1271.94831885 FROM 0.1 TO 0.12
+alpha: t_alpha=0.00166666666667
+t_on: Ton=0.00666666666667
